@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>weather app</title>
+    <style>
+      body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+#city {
+    width: 50%;
+    padding: 10px;
+    font-size: 18px;
+}
+#search-btn {
+    background-color: #4CAF50;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+#search-btn:hover {
+    background-color: #3e8e41;
+}
+#weather-data {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+}
+    </style>
+    <body>
+      <h1>Weather App</h1>
+      <input type="text" id="city" placeholder="Enter city name"><br>
+      <div><button id="search-btn">Search</button></div>
+      <div id="weather-data"></div>
+  
+      <script>
+        const API_ENDPOINT = "http://api.openweathermap.org/data/2.5/weather";
+        const API_KEY = "cd837a3078fc2b814c40039e6c55ebeb";
+
+        const cityInput = document.getElementById("city");
+        const searchBtn = document.getElementById("search-btn");
+        const weatherDataDiv = document.getElementById("weather-data");
+
+        searchBtn.addEventListener("click", async () => {
+        const city = cityInput.value.trim();
+        if (city) {
+            try {
+                const response = await fetch(`${API_ENDPOINT}?q=${city}&appid=${API_KEY}&units=metric`);
+                const weatherData = await response.json();
+                displayWeatherData(weatherData);
+            } catch (error) {
+                console.error(error);
+            }
+        }
+    });
+
+    function displayWeatherData(weatherData) {
+        const city = weatherData.name;
+        const temperature = weatherData.main.temp;
+        const humidity = weatherData.main.humidity;
+        const weatherDescription = weatherData.weather[0].description;
+
+        weatherDataDiv.innerHTML = `Weather in ${city}: ${temperature}°C, ${humidity}% humidity, ${weatherDescription}`;
+    }
+      </script>
+  </body>
+</html>
